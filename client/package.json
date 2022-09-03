@@ -2,12 +2,13 @@
   "name": "client",
   "version": "0.1.0",
   "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
-  },
+  "script":
+  {
+     "dev": "next dev",
+     "build": "next build", 
+      "start": "next start",
+      "lint": "next lint"
+  } ,
   "dependencies": {
     "@emotion/react": "^11.10.4",
     "@heroicons/react": "^2.0.10",
