@@ -4,7 +4,7 @@ import {ethers} from 'ethers'
 import {client } from "../lib/sanityClient";
 import { useRouter } from 'next/router'
 export const TransactionContext = React.createContext();
-import toast from 'react-hot-toast';
+// import toast from 'react-hot-toast';
 let eth;
 
 // Assigning ethereum Metamask Object to our Variable called eth
@@ -147,10 +147,11 @@ export const TransactionProvider = ({ children }) => {
         connectedAccount,
         addressTo,
       )
-      toast.success('Transaction is Successful')
+      // toast.success('Transaction is Successful')
       setIsLoading(false)
     } catch (error) {
-      toast.error(error)
+      console.log(error)
+      // toast.error(error)
      
     }
   }

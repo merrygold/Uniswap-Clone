@@ -7,7 +7,7 @@ import { TransactionContext } from '../context/TransactionContext'
 import Modal from 'react-modal'
 import { useRouter } from 'next/router'
 import TransactionLoader from './TransactionLoader'
-import { Toaster } from 'react-hot-toast';
+// import { Toaster } from 'react-hot-toast';
 
 Modal.setAppElement('#__next')
 
@@ -59,7 +59,7 @@ const Main = () => {
   return (
     
     <div className={style.wrapper}>
-      <Toaster position="top-right" reverseOrder={false} />
+      {/* <Toaster position="top-right" reverseOrder={false} /> */}
       <div className={style.content}>
     
         {/* Header  */}
