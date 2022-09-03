@@ -1,13 +1,14 @@
-import React, { useState, useEffect, useContext } from "react";
-import Image from "next/image";
-import { FiArrowUpRight } from "react-icons/fi";
-import { AiOutlineDown } from "react-icons/ai";
-import { HiOutlineDotsVertical } from "react-icons/hi";
-import ethLogo from "../assets/eth.png";
-import uniswapLogo from "../assets/uniswap.png";
-import { TransactionContext } from "../context/TransactionContext";
 
-
+import Image from 'next/image'
+import { useEffect, useState } from 'react'
+import { FiArrowUpRight } from 'react-icons/fi'
+import { AiOutlineDown } from 'react-icons/ai'
+import { HiOutlineDotsVertical } from 'react-icons/hi'
+import ethLogo from '../assets/eth.png'
+import uniswapLogo from '../assets/uniswap.png'
+import { useContext } from 'react'
+import { TransactionContext } from '../context/TransactionContext'
+import { client } from '../lib/sanityClient'
 
 const style = {
   wrapper: `p-4 w-screen flex justify-between items-center`,
@@ -22,75 +23,86 @@ const style = {
   buttonTextContainer: `h-8 flex items-center`,
   buttonIconContainer: `flex items-center justify-center w-8 h-8`,
   buttonAccent: `bg-[#172A42] border border-[#163256] hover:border-[#234169] h-full rounded-2xl flex items-center justify-center text-[#4F90EA]`,
-};
+}
 
-const header = () => {
-  const [selectedNav, setSelectedNav] = useState("swap");
-  const {connectWallet , currentAccount} = useContext(TransactionContext)
-  const [userName, setUserName] = useState('');
-  // console.log({connectWallet,currentAccount})
+const Header = () => {
+  const [selectedNav, setSelectedNav] = useState('swap')
+  const [userName, setUserName] = useState('')
+  const { connectWallet, currentAccount } = useContext(TransactionContext)
 
   useEffect(() => {
+    if (currentAccount) {
+      ;(async () => {
+        const query = `
+        *[_type=="users" && _id == "${currentAccount}"] {
+          userName,
+        }
+        `
+        const clientRes = await client.fetch(query)
 
-    if(!currentAccount)return
-     setUserName(`${currentAccount.slice(0,7)}...${currentAccount.slice(35)}`)
-     
-  },[currentAccount])
+        if (!(clientRes[0].userName == 'Unnamed')) {
+          setUserName(clientRes[0].userName)
+        } else {
+          setUserName(
+            `${currentAccount.slice(0, 7)}...${currentAccount.slice(35)}`,
+          )
+        }
+      })()
+    }
+  }, [currentAccount])
 
   return (
     <div className={style.wrapper}>
       <div className={style.headerLogo}>
-        {" "}
-        <Image src={uniswapLogo} alt="uniswap" height={80} width={80} />{" "}
+        <Image src={uniswapLogo} alt='uniswap' height={40} width={40} />
       </div>
       <div className={style.nav}>
         <div className={style.navItemsContainer}>
           <div
-            onClick={() => setSelectedNav("swap")}
+            onClick={() => setSelectedNav('swap')}
             className={`${style.navItem} ${
-              selectedNav === "swap" && style.activeNavItem
+              selectedNav === 'swap' && style.activeNavItem
             }`}
           >
             Swap
           </div>
           <div
-            onClick={() => setSelectedNav("pool")}
+            onClick={() => setSelectedNav('pool')}
             className={`${style.navItem} ${
-              selectedNav === "pool" && style.activeNavItem
+              selectedNav === 'pool' && style.activeNavItem
             }`}
           >
             Pool
           </div>
           <div
-            onClick={() => setSelectedNav("vote")}
+            onClick={() => setSelectedNav('vote')}
             className={`${style.navItem} ${
-              selectedNav === "vote" && style.activeNavItem
+              selectedNav === 'vote' && style.activeNavItem
             }`}
           >
             Vote
           </div>
-          <div className={style.navItem}>
-            Charts
-            <FiArrowUpRight />
-          </div>
+          <a
+            href='https://info.uniswap.org/#/'
+            target='_blank'
+            rel='noreferrer'
+          >
+            <div className={style.navItem}>
+              Charts <FiArrowUpRight />
+            </div>
+          </a>
         </div>
       </div>
-
       <div className={style.buttonsContainer}>
-        {/* Ethereum Button  */}
-        <div className={style.buttonsContainer}>
-          <div className={`${style.button} ${style.buttonPadding}`}>
-            <div className={style.buttonIconContainer}>
-              <Image src={ethLogo} alt="eth logo" height={25} width={25} />
-            </div>
-            <p>Ethereum</p>
-            <div className={style.buttonIconContainer}>
-              <AiOutlineDown />
-            </div>
+        <div className={`${style.button} ${style.buttonPadding}`}>
+          <div className={style.buttonIconContainer}>
+            <Image src={ethLogo} alt='eth logo' height={20} width={20} />
+          </div>
+          <p>Ethereum</p>
+          <div className={style.buttonIconContainer}>
+            <AiOutlineDown />
           </div>
         </div>
-
-        {/* Connect Wallet Button  */}
         {currentAccount ? (
           <div className={`${style.button} ${style.buttonPadding}`}>
             <div className={style.buttonTextContainer}>{userName}</div>
@@ -105,8 +117,6 @@ const header = () => {
             </div>
           </div>
         )}
-
-        {/* 3 dots Buttons  */}
         <div className={`${style.button} ${style.buttonPadding}`}>
           <div className={`${style.buttonIconContainer} mx-2`}>
             <HiOutlineDotsVertical />
@@ -114,7 +124,8 @@ const header = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default header;
+export default Header
+
