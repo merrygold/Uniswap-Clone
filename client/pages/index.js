@@ -1,4 +1,4 @@
-import Head from 'next/head'
+
 import Header from '../components/header'
 import Main from '../components/Main'
 import TransactionHistory from '../components/TransactionHistory'
